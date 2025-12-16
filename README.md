@@ -1,20 +1,54 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 每月現金預算分配系統－功能規格書
 
-# Run and deploy your AI Studio app
+## 1. 系統簡介
+本系統為一個「每月現金預算分配」管理工具，提供使用者記錄、編輯、分類與匯出每月的收入與支出項目，並自動計算總收入、總支出與盈餘/赤字，協助用戶有效規劃個人或家庭財務。
 
-This contains everything you need to run your app locally.
+## 2. 主要功能
 
-View your app in AI Studio: https://ai.studio/apps/drive/1B01wdQjrzklpRlMFIv2nT9SITTyf-nfS
+### 2.1 月份選擇
+- 使用者自行輸入欲管理的月份。
+- 月份資訊會顯示於預算分配標題及下載匯出的檔案名稱。
 
-## Run Locally
+### 2.2 收入與支出管理
+- **收入/支出項目列表**：
+  - 預設提供多個常見收入與支出類別。
+  - 支援新增自訂收入/支出項目。
+  - 支援刪除任一收入/支出項目。
+  - 支援編輯項目名稱。
+  - 支援編輯金額，金額欄位可直接輸入數字或四則運算式（如 1000+200-50），按 Enter 自動計算。
+  - 金額欄位支援快速清空與歸零。
+  - 支援拖曳排序收入/支出項目，調整顯示順序。
 
-**Prerequisites:**  Node.js
+### 2.3 自動計算
+- 系統自動計算：
+  - 各收入/支出項目金額加總，分別顯示「總收入」與「總支出」。
+  - 計算「盈餘」或「赤字」：盈餘 = 總收入 - 總支出。
+  - 所有金額皆以千分位顯示。
 
+### 2.4 PDF 下載/匯出
+- 支援將當月預算分配內容匯出為 PDF 檔案。
+- 匯出內容包含：
+  - 月份標題
+  - 收入與支出明細表格
+  - 各類別總計
+  - 每月結算（總收入、總支出、盈餘/赤字）
+- 匯出時自動調整版面，確保列印友善。
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 2.5 互動提示與輔助
+- 金額欄位旁提供提示，說明可直接輸入運算式。
+- 操作按鈕（新增、刪除、下載）皆有提示文字與圖示。
+- 拖曳排序時有明顯視覺指示。
+
+## 3. 其他設計細節
+- 所有資料皆於前端記憶體運作，無後端儲存。
+- 支援即時互動與即時計算。
+- 介面設計以簡潔、易用為主。
+- 支援深淺模式色彩切換。
+
+## 4. 未來擴充建議
+- 支援多月份資料儲存與切換。
+- 匯出 Excel/CSV。
+- 支援自訂分類。
+- 支援資料雲端同步。
+
+---
