@@ -124,10 +124,11 @@ const App: React.FC = () => {
             <h1 className="text-2xl font-bold tracking-tight">每月現金預算分配</h1>
          </div>
 
-         <div className="flex items-center gap-4">
+         <div className="flex items-center gap-4 flex-nowrap min-w-0">
             <button 
               onClick={toggleTheme}
               className={`p-2 rounded-full transition-colors ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400' : 'bg-white hover:bg-slate-100 text-slate-500 shadow-sm'}`}
+              style={{ minWidth: 40, minHeight: 40 }}
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
@@ -141,8 +142,8 @@ const App: React.FC = () => {
       >
         
         {/* Date & Download Bar */}
-        <div className={`rounded-xl p-4 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
-          <div className="flex items-center gap-4">
+        <div className={`rounded-xl p-4 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-2 border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-2 flex-nowrap min-w-0">
             <label className={`text-lg font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
               月份 :
             </label>
@@ -161,10 +162,11 @@ const App: React.FC = () => {
           {!isExporting && (
             <button 
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg shadow transition-all hover:shadow-md active:scale-95"
+              className="flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg shadow transition-all hover:shadow-md active:scale-95 whitespace-nowrap text-base md:text-base text-sm"
+              style={{ minWidth: 0 }}
             >
-              <Download size={18} />
-              <span>下載 PDF</span>
+              <Download size={16} />
+              <span className="truncate">下載 PDF</span>
             </button>
           )}
         </div>

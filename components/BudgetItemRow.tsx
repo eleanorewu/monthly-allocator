@@ -34,7 +34,7 @@ export const BudgetItemRow: React.FC<BudgetItemRowProps> = ({
     zIndex: isOverlay ? 999 : 'auto',
   };
 
-  const [localAmountStr, setLocalAmountStr] = useState<string>(item.amount === 0 ? '' : item.amount.toString());
+  const [localAmountStr, setLocalAmountStr] = useState<string>('');
   const [isEditingAmount, setIsEditingAmount] = useState(false);
   const amountInputRef = useRef<HTMLInputElement>(null);
 
@@ -117,17 +117,11 @@ export const BudgetItemRow: React.FC<BudgetItemRowProps> = ({
         ) : (
           <div 
             onClick={() => setIsEditingAmount(true)}
-            className="w-full text-right cursor-text group/amount flex items-center justify-end gap-2 py-1 border border-transparent hover:border-slate-200 rounded px-2 relative"
+            className="w-full text-right cursor-text flex items-center justify-end gap-2 py-1 border border-transparent hover:border-slate-200 rounded px-2 relative"
           >
-             {/* Calculator Icon with Tooltip */}
-             <span className="relative flex items-center justify-center text-slate-300 opacity-0 group-hover/amount:opacity-100 transition-opacity group/tooltip">
+             {/* Calculator Icon */}
+             <span className="flex items-center justify-center text-slate-300 hover:text-blue-500">
                <Calculator size={14} />
-               {/* Tooltip Popup */}
-               <div className="absolute top-1/2 right-full mr-2 -translate-y-1/2 w-48 p-2 bg-slate-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-50 pointer-events-none text-center font-sans leading-relaxed">
-                 支援加減乘除運算，輸入計算內容後，按 Enter 鍵即可計算出結果。
-                 {/* Arrow pointing right */}
-                 <div className="absolute top-1/2 -right-2 -translate-y-1/2 border-4 border-transparent border-l-slate-800"></div>
-               </div>
              </span>
 
              <span className="font-semibold text-slate-700 font-mono">

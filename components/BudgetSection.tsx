@@ -87,7 +87,13 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({
         <div className="w-8"></div>
         <div className="flex-1">項目</div>
         <div className="w-40 text-right flex items-center justify-end gap-1">
-          <Info size={12} />
+          <span className="relative group">
+            <Info size={12} className="cursor-pointer text-slate-400 group-hover:text-blue-500" />
+            <div className="absolute top-1/2 right-full mr-2 -translate-y-1/2 w-48 p-2 bg-slate-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-center font-sans leading-relaxed whitespace-pre-line">
+              支援加減乘除運算，\n輸入計算內容後，按 Enter 鍵即可計算出結果。
+              <div className="absolute top-1/2 -right-2 -translate-y-1/2 border-4 border-transparent border-l-slate-800"></div>
+            </div>
+          </span>
           金額
         </div>
         <div className="w-8"></div>
