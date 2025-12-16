@@ -2,7 +2,7 @@
 
 ## 1. 系統簡介
 
-https://eleanorewu.github.io/monthly-allocator/
+**線上網址：** https://eleanorewu.github.io/monthly-allocator/
 
 本系統為一個「每月預算規劃」管理工具，提供使用者記錄、編輯、分類與匯出每月的收入與支出項目，並自動計算總收入、總支出與盈餘/赤字，協助用戶有效規劃個人或家庭財務。
 
