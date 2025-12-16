@@ -10,16 +10,24 @@ import { BudgetSection } from './components/BudgetSection';
 // Initial Data
 const INITIAL_INCOME: BudgetItem[] = [
   { id: 'inc-1', name: '上個月盈餘', amount: 0 },
-  { id: 'inc-2', name: '薪資', amount: 50000 },
-  { id: 'inc-3', name: '獎金', amount: 5000 },
+  { id: 'inc-2', name: '薪資', amount: 0 },
+  { id: 'inc-3', name: '加班費', amount: 0 },
+  { id: 'inc-4', name: '股息', amount: 0 },
+  { id: 'inc-5', name: '獎金', amount: 0 },
+  { id: 'inc-6', name: '租屋補助', amount: 0 },
+  { id: 'inc-7', name: '中獎', amount: 0 },
 ];
 
 const INITIAL_EXPENSE: BudgetItem[] = [
-  { id: 'exp-1', name: '房租', amount: 12000 },
-  { id: 'exp-2', name: '生活費', amount: 8000 },
-  { id: 'exp-3', name: '水電瓦斯', amount: 1500 },
-  { id: 'exp-4', name: '交通', amount: 1280 },
-  { id: 'exp-5', name: '電話費', amount: 499 },
+  { id: 'exp-1', name: '房租', amount: 0 },
+  { id: 'exp-2', name: '生活費', amount: 0 },
+  { id: 'exp-3', name: '信用卡費', amount: 0 },
+  { id: 'exp-4', name: '交通', amount: 0 },
+  { id: 'exp-5', name: '帳單', amount: 0 },
+  { id: 'exp-6', name: '保險費', amount: 0 },
+  { id: 'exp-7', name: '投資', amount: 0 },
+  { id: 'exp-8', name: '貸款', amount: 0 },
+  { id: 'exp-9', name: '活存', amount: 0 },
 ];
 
 const App: React.FC = () => {
@@ -116,21 +124,21 @@ const App: React.FC = () => {
     <div className={`min-h-screen p-4 md:p-8 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-800'}`}>
       
       {/* Top Controls */}
-      <header className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
-         <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'}`}>
-              <Wallet size={28} />
+      <header className="max-w-7xl mx-auto mb-8 flex flex-row justify-between items-center gap-2 md:gap-4">
+         <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+            <div className={`p-1.5 md:p-2 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'}`}>
+              <Wallet size={20} className="md:w-7 md:h-7" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight">每月現金預算分配</h1>
+            <h1 className="text-base md:text-2xl font-bold tracking-tight truncate">每月現金預算分配</h1>
          </div>
 
-         <div className="flex items-center gap-4 flex-nowrap min-w-0">
+         <div className="flex items-center gap-2 md:gap-4 flex-nowrap flex-shrink-0">
             <button 
               onClick={toggleTheme}
-              className={`p-2 rounded-full transition-colors ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400' : 'bg-white hover:bg-slate-100 text-slate-500 shadow-sm'}`}
-              style={{ minWidth: 40, minHeight: 40 }}
+              className={`p-1.5 md:p-2 rounded-full transition-colors flex-shrink-0 ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400' : 'bg-white hover:bg-slate-100 text-slate-500 shadow-sm'}`}
+              style={{ minWidth: 32, minHeight: 32 }}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={16} className="md:w-5 md:h-5" /> : <Moon size={16} className="md:w-5 md:h-5" />}
             </button>
          </div>
       </header>
@@ -142,31 +150,30 @@ const App: React.FC = () => {
       >
         
         {/* Date & Download Bar */}
-        <div className={`rounded-xl p-4 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-2 border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
-          <div className="flex items-center gap-2 flex-nowrap min-w-0">
-            <label className={`text-lg font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+        <div className={`rounded-xl p-3 md:p-6 shadow-sm flex flex-row justify-between items-center gap-2 border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-1.5 md:gap-2 flex-nowrap min-w-0 flex-1">
+            <label className={`text-sm md:text-lg font-medium whitespace-nowrap flex-shrink-0 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
               月份 :
             </label>
-            <div className="relative">
+            <div className="relative flex items-center gap-1 md:gap-2 flex-nowrap">
               <input 
                 type="number" 
                 value={month} 
                 onChange={(e) => setMonth(e.target.value)}
                 min="1" max="12"
-                className={`w-20 text-center text-xl font-bold py-1 px-2 rounded border focus:ring-2 focus:ring-blue-500 focus:outline-none ${isDarkMode ? 'bg-slate-900 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-800'}`}
+                className={`w-12 md:w-20 text-center text-sm md:text-xl font-bold py-1 px-1 md:px-2 rounded border focus:ring-2 focus:ring-blue-500 focus:outline-none flex-shrink-0 ${isDarkMode ? 'bg-slate-900 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-800'}`}
               />
-              <span className="ml-2 text-lg font-medium text-slate-500">月預算分配</span>
+              <span className="text-xs md:text-lg font-medium text-slate-500 whitespace-nowrap flex-shrink-0">月預算分配</span>
             </div>
           </div>
 
           {!isExporting && (
             <button 
               onClick={handleDownloadPDF}
-              className="flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg shadow transition-all hover:shadow-md active:scale-95 whitespace-nowrap text-base md:text-base text-sm"
-              style={{ minWidth: 0 }}
+              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg shadow transition-all hover:shadow-md active:scale-95 whitespace-nowrap text-xs md:text-base flex-shrink-0"
             >
-              <Download size={16} />
-              <span className="truncate">下載 PDF</span>
+              <Download size={14} className="md:w-4 md:h-4" />
+              <span>下載 PDF</span>
             </button>
           )}
         </div>
@@ -178,6 +185,7 @@ const App: React.FC = () => {
             type="INCOME"
             items={incomeItems}
             total={totalIncome}
+            isDarkMode={isDarkMode}
             onAddItem={handleAddItem}
             onUpdateItem={(id, updates) => handleUpdateItem('INCOME', id, updates)}
             onRemoveItem={(id) => handleRemoveItem('INCOME', id)}
@@ -189,6 +197,7 @@ const App: React.FC = () => {
             type="EXPENSE"
             items={expenseItems}
             total={totalExpense}
+            isDarkMode={isDarkMode}
             onAddItem={handleAddItem}
             onUpdateItem={(id, updates) => handleUpdateItem('EXPENSE', id, updates)}
             onRemoveItem={(id) => handleRemoveItem('EXPENSE', id)}
@@ -237,7 +246,7 @@ const App: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-8 text-center text-slate-400 text-sm">
-        <p>提示：金額欄位支援算式輸入 (例: 1000+500)，按 Enter 自動計算。</p>
+        <p>2025/12/16 版本 1.0.0</p>
       </div>
     </div>
   );
