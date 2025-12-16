@@ -1,0 +1,5 @@
+{
+  "name": "BudgetFlow - Monthly Allocator",
+  "description": "A clean, efficient monthly budget allocation tool with real-time calculations, drag-and-drop sorting, and math expression support.",
+  "requestFramePermissions": []
+}
