@@ -82,20 +82,54 @@ const App: React.FC = () => {
     if (!pdfPreviewRef.current) return;
     setIsExporting(true);
     
-    // Slight delay to ensure UI updates if needed
-    await new Promise(r => setTimeout(r, 200));
+    // Wait for UI to update
+    await new Promise(r => setTimeout(r, 100));
 
     try {
-      const canvas = await html2canvas(pdfPreviewRef.current, {
+      const pdfElement = pdfPreviewRef.current;
+      if (!pdfElement) {
+        throw new Error("PDF preview element not found");
+      }
+
+      // Temporarily make element visible for html2canvas
+      const originalStyle = {
+        position: pdfElement.style.position,
+        left: pdfElement.style.left,
+        top: pdfElement.style.top,
+        zIndex: pdfElement.style.zIndex,
+        opacity: pdfElement.style.opacity,
+        visibility: pdfElement.style.visibility,
+      };
+
+      // Make element visible but off-screen
+      pdfElement.style.position = 'fixed';
+      pdfElement.style.left = '0';
+      pdfElement.style.top = '0';
+      pdfElement.style.zIndex = '9999';
+      pdfElement.style.opacity = '1';
+      pdfElement.style.visibility = 'visible';
+
+      // Wait for rendering
+      await new Promise(r => setTimeout(r, 200));
+
+      const canvas = await html2canvas(pdfElement, {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
         logging: false,
-        width: pdfPreviewRef.current.scrollWidth,
-        height: pdfPreviewRef.current.scrollHeight,
+        allowTaint: true,
+        width: pdfElement.scrollWidth,
+        height: pdfElement.scrollHeight,
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      // Restore original style
+      Object.assign(pdfElement.style, originalStyle);
+
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        throw new Error("Failed to capture PDF preview");
+      }
+
+      const imgData = canvas.toDataURL('image/png', 1.0);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -120,7 +154,7 @@ const App: React.FC = () => {
       pdf.save(`${month}月預算規劃.pdf`);
     } catch (err) {
       console.error("PDF Export failed", err);
-      alert("匯出失敗，請稍後再試");
+      alert("匯出失敗，請稍後再試：" + (err instanceof Error ? err.message : String(err)));
     } finally {
       setIsExporting(false);
     }
@@ -160,17 +194,27 @@ const App: React.FC = () => {
       </header>
 
       {/* PDF Preview - Hidden, only used for PDF generation */}
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', visibility: 'hidden' }}>
-        <div ref={pdfPreviewRef}>
-          <PDFPreview
-            month={month}
-            incomeItems={incomeItems}
-            expenseItems={expenseItems}
-            totalIncome={totalIncome}
-            totalExpense={totalExpense}
-            balance={balance}
-          />
-        </div>
+      <div 
+        ref={pdfPreviewRef}
+        style={{ 
+          position: 'fixed', 
+          left: '0', 
+          top: '0', 
+          width: '210mm',
+          zIndex: -1,
+          opacity: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden'
+        }}
+      >
+        <PDFPreview
+          month={month}
+          incomeItems={incomeItems}
+          expenseItems={expenseItems}
+          totalIncome={totalIncome}
+          totalExpense={totalExpense}
+          balance={balance}
+        />
       </div>
 
       {/* Main Content Area */}
@@ -197,15 +241,27 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {!isExporting && (
-            <button 
-              onClick={handleDownloadPDF}
-              className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg shadow transition-all hover:shadow-md active:scale-95 whitespace-nowrap text-xs md:text-base flex-shrink-0"
-            >
-              <Download size={14} className="md:w-4 md:h-4" />
-              <span>下載 PDF</span>
-            </button>
-          )}
+          <button 
+            onClick={handleDownloadPDF}
+            disabled={isExporting}
+            className={`flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 rounded-lg shadow transition-all whitespace-nowrap text-xs md:text-base flex-shrink-0 ${
+              isExporting 
+                ? 'bg-slate-400 text-white cursor-not-allowed' 
+                : 'bg-slate-800 hover:bg-slate-700 text-white hover:shadow-md active:scale-95'
+            }`}
+          >
+            {isExporting ? (
+              <>
+                <div className="animate-spin rounded-full h-3.5 w-3.5 md:h-4 md:w-4 border-2 border-white border-t-transparent"></div>
+                <span>生成中...</span>
+              </>
+            ) : (
+              <>
+                <Download size={14} className="md:w-4 md:h-4" />
+                <span>下載 PDF</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Budget Columns */}

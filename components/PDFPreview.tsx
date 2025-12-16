@@ -25,264 +25,261 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({
       style={{
         width: '210mm',
         minHeight: '297mm',
-        padding: '15mm',
+        padding: '20mm',
         backgroundColor: '#ffffff',
         fontFamily: 'Arial, sans-serif',
-        fontSize: '11px',
+        fontSize: '12px',
         color: '#000000',
         boxSizing: 'border-box',
       }}
     >
       {/* Title */}
-      <h1 style={{
-        fontSize: '20px',
+      <div style={{
+        fontSize: '16px',
         fontWeight: 'bold',
+        marginBottom: '20px',
         textAlign: 'center',
-        marginBottom: '12px',
-        marginTop: '0',
         color: '#000000',
       }}>
         {month}月預算規劃
-      </h1>
+      </div>
 
-      {/* Income and Expense Tables */}
-      <div style={{ display: 'flex', gap: '8mm', marginBottom: '12px' }}>
-        {/* Income Table */}
+      {/* Income and Expense Tables - Side by Side */}
+      <div style={{ 
+        display: 'flex', 
+        gap: '15mm', 
+        marginBottom: '20px',
+        alignItems: 'flex-start'
+      }}>
+        {/* Income Table - Left */}
         <div style={{ flex: 1 }}>
-          <h2 style={{
+          <div style={{
             fontSize: '14px',
             fontWeight: 'bold',
-            marginBottom: '6px',
-            color: '#059669',
-            borderBottom: '2px solid #059669',
-            paddingBottom: '3px',
+            marginBottom: '10px',
+            color: '#059669', // Green color for income
           }}>
             收入
-          </h2>
+          </div>
           <table style={{
             width: '100%',
             borderCollapse: 'collapse',
-            marginBottom: '0',
+            border: '1px solid #d1d5db',
           }}>
             <thead>
-              <tr style={{ backgroundColor: '#f3f4f6' }}>
+              <tr>
                 <th style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '8px',
                   textAlign: 'left',
                   fontWeight: 'bold',
-                  fontSize: '10px',
+                  fontSize: '12px',
+                  backgroundColor: '#f3f4f6',
                 }}>項目</th>
                 <th style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '8px',
                   textAlign: 'right',
                   fontWeight: 'bold',
-                  fontSize: '10px',
+                  fontSize: '12px',
+                  backgroundColor: '#f3f4f6',
                 }}>金額</th>
               </tr>
             </thead>
             <tbody>
-              {incomeItems.map((item, index) => (
-                <tr key={item.id} style={{
-                  backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
-                }}>
+              {incomeItems.map((item) => (
+                <tr key={item.id}>
                   <td style={{
                     border: '1px solid #d1d5db',
-                    padding: '5px',
-                    fontSize: '10px',
+                    padding: '6px',
+                    fontSize: '12px',
                   }}>{item.name || '(未命名)'}</td>
                   <td style={{
                     border: '1px solid #d1d5db',
-                    padding: '5px',
+                    padding: '6px',
                     textAlign: 'right',
-                    fontFamily: 'monospace',
-                    fontSize: '10px',
-                  }}>{formatCurrency(item.amount)}</td>
+                    fontSize: '12px',
+                  }}>{item.amount === 0 ? '0' : formatCurrency(item.amount)}</td>
                 </tr>
               ))}
-              <tr style={{ backgroundColor: '#ecfdf5', fontWeight: 'bold' }}>
+              <tr style={{ fontWeight: 'bold' }}>
                 <td style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
-                  fontSize: '10px',
+                  padding: '6px',
+                  fontSize: '12px',
                 }}>總收入</td>
                 <td style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '6px',
                   textAlign: 'right',
-                  fontFamily: 'monospace',
-                  fontSize: '10px',
-                  color: '#059669',
-                }}>{formatCurrency(totalIncome)}</td>
+                  fontSize: '12px',
+                  color: '#059669', // Green color for total income
+                }}>{formatCurrency(totalIncome)} 元</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        {/* Expense Table */}
+        {/* Expense Table - Right */}
         <div style={{ flex: 1 }}>
-          <h2 style={{
+          <div style={{
             fontSize: '14px',
             fontWeight: 'bold',
-            marginBottom: '6px',
-            color: '#dc2626',
-            borderBottom: '2px solid #dc2626',
-            paddingBottom: '3px',
+            marginBottom: '10px',
+            color: '#dc2626', // Red color for expense
           }}>
             支出
-          </h2>
+          </div>
           <table style={{
             width: '100%',
             borderCollapse: 'collapse',
-            marginBottom: '0',
+            border: '1px solid #d1d5db',
           }}>
             <thead>
-              <tr style={{ backgroundColor: '#f3f4f6' }}>
+              <tr>
                 <th style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '8px',
                   textAlign: 'left',
                   fontWeight: 'bold',
-                  fontSize: '10px',
+                  fontSize: '12px',
+                  backgroundColor: '#f3f4f6',
                 }}>項目</th>
                 <th style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '8px',
                   textAlign: 'right',
                   fontWeight: 'bold',
-                  fontSize: '10px',
+                  fontSize: '12px',
+                  backgroundColor: '#f3f4f6',
                 }}>金額</th>
               </tr>
             </thead>
             <tbody>
-              {expenseItems.map((item, index) => (
-                <tr key={item.id} style={{
-                  backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
-                }}>
+              {expenseItems.map((item) => (
+                <tr key={item.id}>
                   <td style={{
                     border: '1px solid #d1d5db',
-                    padding: '5px',
-                    fontSize: '10px',
+                    padding: '6px',
+                    fontSize: '12px',
                   }}>{item.name || '(未命名)'}</td>
                   <td style={{
                     border: '1px solid #d1d5db',
-                    padding: '5px',
+                    padding: '6px',
                     textAlign: 'right',
-                    fontFamily: 'monospace',
-                    fontSize: '10px',
-                  }}>{formatCurrency(item.amount)}</td>
+                    fontSize: '12px',
+                  }}>{item.amount === 0 ? '0' : formatCurrency(item.amount)}</td>
                 </tr>
               ))}
-              <tr style={{ backgroundColor: '#fef2f2', fontWeight: 'bold' }}>
+              <tr style={{ fontWeight: 'bold' }}>
                 <td style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
-                  fontSize: '10px',
+                  padding: '6px',
+                  fontSize: '12px',
                 }}>總支出</td>
                 <td style={{
                   border: '1px solid #d1d5db',
-                  padding: '5px',
+                  padding: '6px',
                   textAlign: 'right',
-                  fontFamily: 'monospace',
-                  fontSize: '10px',
-                  color: '#dc2626',
-                }}>{formatCurrency(totalExpense)}</td>
+                  fontSize: '12px',
+                  color: '#dc2626', // Red color for total expense
+                }}>{formatCurrency(totalExpense)} 元</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Summary */}
-      <div style={{
-        marginTop: '12px',
-        border: '2px solid #1e293b',
-        borderRadius: '4px',
-        padding: '10px',
-        backgroundColor: '#f8fafc',
-      }}>
-        <h3 style={{
-          fontSize: '12px',
+      {/* Summary - Three Colored Boxes */}
+      <div style={{ marginTop: '20px' }}>
+        <div style={{
+          fontSize: '14px',
           fontWeight: 'bold',
-          marginBottom: '8px',
-          marginTop: '0',
-          color: '#475569',
-          textTransform: 'uppercase',
-          letterSpacing: '1px',
+          marginBottom: '10px',
+          color: '#000000',
         }}>
           每月結算
-        </h3>
-        <table style={{
-          width: '100%',
-          borderCollapse: 'collapse',
+        </div>
+        <div style={{
+          display: 'flex',
+          gap: '10px',
         }}>
-          <tbody>
-            <tr>
-              <td style={{
-                padding: '6px',
-                fontSize: '11px',
-                fontWeight: 'bold',
-                width: '33%',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#ecfdf5',
-              }}>總收入</td>
-              <td style={{
-                padding: '6px',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                fontFamily: 'monospace',
-                color: '#059669',
-                textAlign: 'right',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#ecfdf5',
-              }}>{formatCurrency(totalIncome)} 元</td>
-            </tr>
-            <tr>
-              <td style={{
-                padding: '6px',
-                fontSize: '11px',
-                fontWeight: 'bold',
-                width: '33%',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#fef2f2',
-              }}>總支出</td>
-              <td style={{
-                padding: '6px',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                fontFamily: 'monospace',
-                color: '#dc2626',
-                textAlign: 'right',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#fef2f2',
-              }}>{formatCurrency(totalExpense)} 元</td>
-            </tr>
-            <tr>
-              <td style={{
-                padding: '6px',
-                fontSize: '11px',
-                fontWeight: 'bold',
-                width: '33%',
-                border: '1px solid #cbd5e1',
-                backgroundColor: balance >= 0 ? '#dbeafe' : '#fff7ed',
-              }}>{balance >= 0 ? '盈餘' : '赤字'}</td>
-              <td style={{
-                padding: '6px',
-                fontSize: '14px',
-                fontWeight: 'bold',
-                fontFamily: 'monospace',
-                color: balance >= 0 ? '#2563eb' : '#ea580c',
-                textAlign: 'right',
-                border: '1px solid #cbd5e1',
-                backgroundColor: balance >= 0 ? '#dbeafe' : '#fff7ed',
-              }}>
-                {balance < 0 && '-'}
-                {formatCurrency(Math.abs(balance))} 元
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          {/* Total Income Box - Light Green */}
+          <div style={{
+            flex: 1,
+            backgroundColor: '#ecfdf5', // Light green background
+            border: '1px solid #d1d5db',
+            borderRadius: '4px',
+            padding: '15px',
+          }}>
+            <div style={{
+              fontSize: '12px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: '#059669',
+            }}>
+              總收入
+            </div>
+            <div style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              color: '#059669',
+            }}>
+              {formatCurrency(totalIncome)} 元
+            </div>
+          </div>
+
+          {/* Total Expense Box - Light Red */}
+          <div style={{
+            flex: 1,
+            backgroundColor: '#fef2f2', // Light red background
+            border: '1px solid #d1d5db',
+            borderRadius: '4px',
+            padding: '15px',
+          }}>
+            <div style={{
+              fontSize: '12px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: '#dc2626',
+            }}>
+              總支出
+            </div>
+            <div style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              color: '#dc2626',
+            }}>
+              {formatCurrency(totalExpense)} 元
+            </div>
+          </div>
+
+          {/* Balance Box - Light Blue */}
+          <div style={{
+            flex: 1,
+            backgroundColor: balance >= 0 ? '#dbeafe' : '#fff7ed', // Light blue or light orange
+            border: '1px solid #d1d5db',
+            borderRadius: '4px',
+            padding: '15px',
+          }}>
+            <div style={{
+              fontSize: '12px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: balance >= 0 ? '#2563eb' : '#ea580c',
+            }}>
+              {balance >= 0 ? '盈餘' : '赤字'}
+            </div>
+            <div style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              color: balance >= 0 ? '#2563eb' : '#ea580c',
+            }}>
+              {balance < 0 && '-'}
+              {formatCurrency(Math.abs(balance))} 元
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
