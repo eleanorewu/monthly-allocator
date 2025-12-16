@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import { BudgetItem, ItemType } from './types';
 import { generateId, formatCurrency } from './utils/mathUtils';
 import { BudgetSection } from './components/BudgetSection';
+import { PDFPreview } from './components/PDFPreview';
 
 // Initial Data
 const INITIAL_INCOME: BudgetItem[] = [
@@ -36,6 +37,7 @@ const App: React.FC = () => {
   const [expenseItems, setExpenseItems] = useState<BudgetItem[]>(INITIAL_EXPENSE);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
+  const pdfPreviewRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
 
   // -- Calculations --
@@ -77,31 +79,45 @@ const App: React.FC = () => {
 
   // -- PDF Export --
   const handleDownloadPDF = async () => {
-    if (!printRef.current) return;
+    if (!pdfPreviewRef.current) return;
     setIsExporting(true);
     
     // Slight delay to ensure UI updates if needed
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 200));
 
     try {
-      const canvas = await html2canvas(printRef.current, {
-        scale: 2, // Higher resolution
-        backgroundColor: isDarkMode ? '#1e293b' : '#f8fafc',
+      const canvas = await html2canvas(pdfPreviewRef.current, {
+        scale: 2,
+        backgroundColor: '#ffffff',
         useCORS: true,
+        logging: false,
+        width: pdfPreviewRef.current.scrollWidth,
+        height: pdfPreviewRef.current.scrollHeight,
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
-        orientation: 'landscape',
+        orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
       });
 
-      const imgWidth = 297; // A4 Landscape width
+      // A4 dimensions in mm
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(`預算分配表_${month}月.pdf`);
+
+      // If content fits in one page, add it directly
+      if (imgHeight <= pageHeight) {
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      } else {
+        // If content is too tall, scale it to fit one page
+        const scale = pageHeight / imgHeight;
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth * scale, pageHeight);
+      }
+
+      pdf.save(`${month}月預算規劃.pdf`);
     } catch (err) {
       console.error("PDF Export failed", err);
       alert("匯出失敗，請稍後再試");
@@ -129,7 +145,7 @@ const App: React.FC = () => {
             <div className={`p-1.5 md:p-2 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'}`}>
               <Wallet size={20} className="md:w-7 md:h-7" />
             </div>
-            <h1 className="text-base md:text-2xl font-bold tracking-tight truncate">每月現金預算分配</h1>
+            <h1 className="text-base md:text-2xl font-bold tracking-tight truncate">每月預算規劃</h1>
          </div>
 
          <div className="flex items-center gap-2 md:gap-4 flex-nowrap flex-shrink-0">
@@ -143,10 +159,24 @@ const App: React.FC = () => {
          </div>
       </header>
 
-      {/* Main Content Area - This part gets captured for PDF */}
+      {/* PDF Preview - Hidden, only used for PDF generation */}
+      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', visibility: 'hidden' }}>
+        <div ref={pdfPreviewRef}>
+          <PDFPreview
+            month={month}
+            incomeItems={incomeItems}
+            expenseItems={expenseItems}
+            totalIncome={totalIncome}
+            totalExpense={totalExpense}
+            balance={balance}
+          />
+        </div>
+      </div>
+
+      {/* Main Content Area */}
       <div 
         ref={printRef} 
-        className={`max-w-7xl mx-auto space-y-8 ${isExporting ? 'p-8' : ''} ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}
+        className={`max-w-7xl mx-auto space-y-8 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}
       >
         
         {/* Date & Download Bar */}
